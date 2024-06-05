@@ -1,0 +1,181 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique @db.VarChar(50)
+  phone     String    @unique @db.VarChar(10)
+  password  String
+  name      String
+  isAdmin   Boolean   @default(false)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  bookings  Booking[]
+}
+
+model Movie {
+  id               Int      @id @default(autoincrement())
+  movieName        String
+  movieSynopsis    String?  @db.Text
+  genreId1         Int?
+  genreId2         Int?
+  genreId3         Int?
+  movieImagePath   String?
+  movieTrailerPath String?
+  duration         Decimal?
+  createdAt        DateTime @default(now()) @db.Timestamp(0)
+  updatedAt        DateTime @updatedAt @db.Timestamp(0)
+
+  genre1          GenreType?       @relation(name: "genre1", fields: [genreId1], references: [id])
+  genre2          GenreType?       @relation(name: "genre2", fields: [genreId2], references: [id])
+  genre3          GenreType?       @relation(name: "genre3", fields: [genreId3], references: [id])
+  movieSelections MovieSelection[]
+  showtimes       Showtime[]
+}
+
+model GenreType {
+  id        Int           @id @default(autoincrement())
+  genreType GenreTypeEnum
+  genre1    Movie[]       @relation(name: "genre1")
+  genre2    Movie[]       @relation(name: "genre2")
+  genre3    Movie[]       @relation(name: "genre3")
+}
+
+enum GenreTypeEnum {
+  ACTION
+  ANIMATION
+  ADVENTURE
+  COMEDY
+  DRAMA
+  THRILLER
+  ROMANCE
+  HORROR
+  FANTASY
+  MUSICAL
+  CRIME
+}
+
+model MovieSelection {
+  id                Int @id @default(autoincrement())
+  movieId           Int
+  movieSelectTypeId Int
+
+  movie           Movie           @relation(fields: [movieId], references: [id])
+  movieSelectType MovieSelectType @relation(fields: [movieSelectTypeId], references: [id])
+}
+
+model MovieSelectType {
+  id              Int                    @id @default(autoincrement())
+  movieSelectType MovieSelectionTypeEnum
+  movieSelections MovieSelection[]
+}
+
+enum MovieSelectionTypeEnum {
+  HIGHLIGHT
+  CURRENTLY
+  UPCOMING
+}
+
+model Theater {
+  id          Int        @id @default(autoincrement())
+  theaterName String
+  showtimes   Showtime[]
+  seats       Seat[]
+}
+
+model Showtime {
+  id             Int      @id @default(autoincrement())
+  theaterId      Int
+  movieId        Int
+  date           DateTime @db.Date
+  startMovieTime DateTime @db.Time
+  endMovieTime   DateTime @db.Time
+
+  theater  Theater   @relation(fields: [theaterId], references: [id])
+  movie    Movie     @relation(fields: [movieId], references: [id])
+  bookings Booking[]
+}
+
+model Seat {
+  id           Int    @id @default(autoincrement())
+  theaterId    Int
+  statusTypeId Int
+  seatTypeId   Int
+  row          String @db.VarChar(1)
+  column       String @db.VarChar(1)
+  price        Int
+
+  theater    Theater              @relation(fields: [theaterId], references: [id])
+  statusType StatusType           @relation(fields: [statusTypeId], references: [id])
+  seatType   SeatType             @relation(fields: [seatTypeId], references: [id])
+  seat1      BookingSeatsDetail[] @relation(name: "seat1")
+  seat2      BookingSeatsDetail[] @relation(name: "seat2")
+  seat3      BookingSeatsDetail[] @relation(name: "seat3")
+}
+
+model SeatType {
+  id           Int              @id @default(autoincrement())
+  seatTypeName SeatTypeNameEnum
+  seats        Seat[]
+}
+
+enum SeatTypeNameEnum {
+  NORMAL
+  PREMIUM
+}
+
+model StatusType {
+  id         Int            @id @default(autoincrement())
+  statusType StatusTypeEnum
+  seats      Seat[]
+}
+
+enum StatusTypeEnum {
+  AVAILABLE
+  UNAVAILABLE
+  BOOKED
+}
+
+model BookingSeatsDetail {
+  id      Int  @id @default(autoincrement())
+  seatId1 Int
+  seatId2 Int?
+  seatId3 Int?
+
+  seat1    Seat      @relation(name: "seat1", fields: [seatId1], references: [id])
+  seat2    Seat?     @relation(name: "seat2", fields: [seatId2], references: [id])
+  seat3    Seat?     @relation(name: "seat3", fields: [seatId3], references: [id])
+  bookings Booking[]
+}
+
+model Booking {
+  id                   Int      @id @default(autoincrement())
+  showtimeId           Int
+  bookingSeatsDetailId Int
+  paymentTypeId        Int
+  userId               Int
+  qrCodeImagePath      String
+  createdAt            DateTime @default(now()) @db.Timestamp(0)
+  updatedAt            DateTime @updatedAt @db.Timestamp(0)
+
+  showtime           Showtime           @relation(fields: [showtimeId], references: [id])
+  bookingSeatsDetail BookingSeatsDetail @relation(fields: [bookingSeatsDetailId], references: [id])
+  paymentType        PaymentType        @relation(fields: [paymentTypeId], references: [id])
+  user               User               @relation(fields: [userId], references: [id])
+}
+
+model PaymentType {
+  id            Int               @id @default(autoincrement())
+  paymentStatus PaymentStatusEnum
+  bookings      Booking[]
+}
+
+enum PaymentStatusEnum {
+  PENDING
+  SUCCESS
+}
