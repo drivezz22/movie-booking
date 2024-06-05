@@ -27,7 +27,7 @@ model Movie {
   genreId3         Int?
   movieImagePath   String?
   movieTrailerPath String?
-  duration         Decimal?
+  durationInMin    Int?
   createdAt        DateTime @default(now()) @db.Timestamp(0)
   updatedAt        DateTime @updatedAt @db.Timestamp(0)
 
