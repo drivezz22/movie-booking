@@ -1,6 +1,7 @@
 const createError = require("../utils/create-error");
 const authValidateSchema = require("../validators/auth-validator");
 const movieValidateSchema = require("../validators/movie-validator");
+const seatValidateSchema = require("../validators/seat-validator");
 
 const validatorWrapper = (schema, req, res, next) => {
   const { value, error } = schema.validate(req.body);
@@ -16,4 +17,8 @@ exports.registerValidator = (req, res, next) =>
 exports.loginValidator = (req, res, next) =>
   validatorWrapper(authValidateSchema.login, req, res, next);
 exports.movieValidator = (req, res, next) =>
-  validatorWrapper(movieValidateSchema.createMovie, req, res, next);
+  validatorWrapper(movieValidateSchema.movie, req, res, next);
+exports.seatPriceValidator = (req, res, next) =>
+  validatorWrapper(seatValidateSchema.price, req, res, next);
+exports.seatStatusValidator = (req, res, next) =>
+  validatorWrapper(seatValidateSchema.status, req, res, next);

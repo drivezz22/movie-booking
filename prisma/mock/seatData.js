@@ -11,7 +11,7 @@ const findSeatsData = () => {
         seatData.theaterId = count;
         seatData.statusTypeId = 1;
         seatData.row = rowName[row - 1];
-        if (rowName[row] === "A") {
+        if (rowName[row - 1] === "A") {
           seatData.seatTypeId = 2;
           seatData.price = 500;
         } else {

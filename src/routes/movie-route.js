@@ -15,8 +15,8 @@ movieRouter.patch(
 
 movieRouter.delete("/:movieId", adminAuthenticate, movieController.deleteMovie);
 
-movieRouter.get("/:movieId", adminAuthenticate, movieController.getMovie);
+movieRouter.get("/:movieId", movieController.getMovie);
 
-movieRouter.get("/", adminAuthenticate, movieController.getAllMovie);
+movieRouter.get("/", movieController.getAllMovie);
 
 module.exports = movieRouter;
