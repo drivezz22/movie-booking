@@ -1,0 +1,5 @@
+exports.MOVIE_SELECT_TYPE = {
+  HIGHLIGHT: 1,
+  CURRENTLY: 2,
+  UPCOMING: 3,
+};
