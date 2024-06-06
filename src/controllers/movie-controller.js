@@ -1,33 +1,62 @@
 const movieService = require("../services/movie-service");
+const uploadService = require("../services/upload-service");
 const createError = require("../utils/create-error");
 const tryCatch = require("../utils/try-catch-wrapper");
-
+const fs = require("fs-extra");
 const movieController = {};
 
-movieController.createMovie = tryCatch(async (req, res, next) => {
-  const data = req.body;
+movieController.createMovie = async (req, res, next) => {
+  try {
+    const data = req.body;
+    if (req.file) {
+      const movieImageUrl = await uploadService.upload(req.file.path);
+      data.movieImagePath = movieImageUrl;
+    }
 
-  await movieService.createMovie(data);
-  res.status(201).json({ message: "Movie is created" });
-});
-
-movieController.updateMovie = tryCatch(async (req, res, next) => {
-  const data = req.body;
-  const { movieId } = req.params;
-  const existMovie = await movieService.getMovieById(+movieId);
-  if (!existMovie) {
-    createError({ message: "No movie in DB", statusCode: 400 });
+    await movieService.createMovie(data);
+    res.status(201).json({ message: "Movie is created" });
+  } catch (err) {
+    next(err);
+  } finally {
+    fs.emptyDirSync("./public/images");
   }
+};
 
-  await movieService.updateMovieById(+movieId, data);
-  res.status(200).json({ message: "Movie is updated" });
-});
+movieController.updateMovie = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const { movieId } = req.params;
+    const existMovie = await movieService.getMovieById(+movieId);
+    if (!existMovie) {
+      createError({ message: "No movie in DB", statusCode: 400 });
+    }
+
+    if (existMovie.movieImagePath) {
+      await uploadService.delete(existMovie.movieImagePath);
+    }
+    if (req.file) {
+      const movieImageUrl = await uploadService.upload(req.file.path);
+      data.movieImagePath = movieImageUrl;
+    }
+
+    await movieService.updateMovieById(+movieId, data);
+    res.status(200).json({ message: "Movie is updated" });
+  } catch (err) {
+    next(err);
+  } finally {
+    fs.emptyDirSync("./public/images");
+  }
+};
 
 movieController.deleteMovie = tryCatch(async (req, res, next) => {
   const { movieId } = req.params;
   const existMovie = await movieService.getMovieById(+movieId);
   if (!existMovie) {
     createError({ message: "No movie in DB", statusCode: 400 });
+  }
+
+  if (existMovie.movieImagePath) {
+    await uploadService.delete(existMovie.movieImagePath);
   }
 
   await movieService.deleteMovieById(+movieId);

@@ -1,5 +1,6 @@
 const createError = require("../utils/create-error");
 const authValidateSchema = require("../validators/auth-validator");
+const movieSeletionValidateSchema = require("../validators/movie-selection-validator");
 const movieValidateSchema = require("../validators/movie-validator");
 const seatValidateSchema = require("../validators/seat-validator");
 
@@ -16,9 +17,13 @@ exports.registerValidator = (req, res, next) =>
   validatorWrapper(authValidateSchema.register, req, res, next);
 exports.loginValidator = (req, res, next) =>
   validatorWrapper(authValidateSchema.login, req, res, next);
-exports.movieValidator = (req, res, next) =>
-  validatorWrapper(movieValidateSchema.movie, req, res, next);
+exports.createMovieValidator = (req, res, next) =>
+  validatorWrapper(movieValidateSchema.createMovie, req, res, next);
+exports.updateMovieValidator = (req, res, next) =>
+  validatorWrapper(movieValidateSchema.updateMovie, req, res, next);
 exports.seatPriceValidator = (req, res, next) =>
   validatorWrapper(seatValidateSchema.price, req, res, next);
 exports.seatStatusValidator = (req, res, next) =>
   validatorWrapper(seatValidateSchema.status, req, res, next);
+exports.movieSelectionValidator = (req, res, next) =>
+  validatorWrapper(movieSeletionValidateSchema.selectionType, req, res, next);
