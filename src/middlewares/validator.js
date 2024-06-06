@@ -1,9 +1,12 @@
 const createError = require("../utils/create-error");
-const authValidateSchema = require("../validators/auth-validator");
-const movieSeletionValidateSchema = require("../validators/movie-selection-validator");
-const movieValidateSchema = require("../validators/movie-validator");
-const seatValidateSchema = require("../validators/seat-validator");
-const showtimeValidateSchema = require("../validators/showtime-validation");
+const {
+  authValidateSchema,
+  bookingValidateSchema,
+  movieSeletionValidateSchema,
+  movieValidateSchema,
+  seatValidateSchema,
+  showtimeValidateSchema,
+} = require("../validators");
 
 const validatorWrapper = (schema, req, res, next) => {
   const { value, error } = schema.validate(req.body);
@@ -32,3 +35,5 @@ exports.createShowtimeValidator = (req, res, next) =>
   validatorWrapper(showtimeValidateSchema.createShowtime, req, res, next);
 exports.updateShowtimeValidator = (req, res, next) =>
   validatorWrapper(showtimeValidateSchema.updateShowtime, req, res, next);
+exports.createBookingValidator = (req, res, next) =>
+  validatorWrapper(bookingValidateSchema.createBooking, req, res, next);
