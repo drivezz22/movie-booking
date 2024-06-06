@@ -1,7 +1,7 @@
 const express = require("express");
-const adminAuthenticate = require("../middlewares/admin-authenticate");
-const authenticate = require("../middlewares/authenticate");
 const movieSelectionController = require("../controllers/movie-selection-controller");
+const { adminAuthenticate } = require("../middlewares");
+
 const movieSelectionRouter = express.Router();
 
 movieSelectionRouter.post(

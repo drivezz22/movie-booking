@@ -1,13 +1,14 @@
 const express = require("express");
-const adminAuthenticate = require("../middlewares/admin-authenticate");
-const {
-  updateMovieValidator,
-  createMovieValidator,
-} = require("../middlewares/validator");
 const movieController = require("../controllers/movie-controller");
+const {
+  adminAuthenticate,
+  movieDatatypeConvert,
+  upload,
+  createMovieValidator,
+  updateMovieValidator,
+} = require("../middlewares");
+
 const movieRouter = express.Router();
-const upload = require("../middlewares/upload");
-const movieDatatypeConvert = require("../middlewares/movie-datatype-convert");
 
 movieRouter.post(
   "/",
@@ -28,9 +29,7 @@ movieRouter.patch(
 );
 
 movieRouter.delete("/:movieId", adminAuthenticate, movieController.deleteMovie);
-
 movieRouter.get("/:movieId", movieController.getMovie);
-
 movieRouter.get("/", movieController.getAllMovie);
 
 module.exports = movieRouter;

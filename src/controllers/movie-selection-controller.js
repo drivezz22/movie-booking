@@ -62,8 +62,8 @@ movieSelectionController.deleteSelection = tryCatch(async (req, res, next) => {
   const movieSelectTypeId = MOVIE_SELECT_TYPE[movieSelectType.toUpperCase()];
   const { movieId } = req.params;
   const existMovieSelection =
-    movieSelectionTypeService.findSelectionByMovieIdSelectionType(
-      movieId,
+    await movieSelectionTypeService.findSelectionByMovieIdSelectionType(
+      +movieId,
       movieSelectTypeId
     );
   if (!existMovieSelection) {
@@ -85,7 +85,7 @@ movieSelectionController.getMovieSelectionBySelectionType = tryCatch(
     const existMovieSelectionList =
       await movieSelectionTypeService.findSelectionBySelectionType(movieSelectTypeId);
 
-    if (existMovieSelectionList.length === 0) {
+    if (existMovieSelectionList.length === 0 || movieSelectType) {
       createError({
         message: "No movie selection in DB",
         statusCode: 400,

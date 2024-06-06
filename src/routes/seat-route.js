@@ -1,7 +1,11 @@
 const express = require("express");
-const adminAuthenticate = require("../middlewares/admin-authenticate");
-const { seatPriceValidator, seatStatusValidator } = require("../middlewares/validator");
 const seatController = require("../controllers/seat-controller");
+const {
+  adminAuthenticate,
+  seatPriceValidator,
+  seatStatusValidator,
+} = require("../middlewares");
+
 const seatRouter = express.Router();
 
 seatRouter.post(

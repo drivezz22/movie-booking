@@ -1,17 +1,18 @@
 const express = require("express");
-const adminAuthenticate = require("../middlewares/admin-authenticate");
 const showtimeController = require("../controllers/showtime-controller");
-const showtimeDateTimeValidate = require("../middlewares/showtime-time-datetime-validate");
-const showtimeRouter = express.Router();
 const {
+  adminAuthenticate,
   createShowtimeValidator,
+  showtimeDateTimeValidator,
   updateShowtimeValidator,
-} = require("../middlewares/validator");
+} = require("../middlewares");
+
+const showtimeRouter = express.Router();
 
 showtimeRouter.post(
   "/",
   adminAuthenticate,
-  showtimeDateTimeValidate,
+  showtimeDateTimeValidator,
   createShowtimeValidator,
   showtimeController.createShowtime
 );
@@ -19,7 +20,7 @@ showtimeRouter.post(
 showtimeRouter.patch(
   "/:showtimeId/update",
   adminAuthenticate,
-  showtimeDateTimeValidate,
+  showtimeDateTimeValidator,
   updateShowtimeValidator,
   showtimeController.updateShowtime
 );

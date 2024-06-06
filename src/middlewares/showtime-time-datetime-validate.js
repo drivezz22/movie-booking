@@ -12,7 +12,7 @@ const { timeCompareBetweenShowtime } = require("../utils/time-compare-between-sh
 
 dayjs.extend(customParseFormat);
 
-const showtimeDateTimeValidate = tryCatch(async (req, res, next) => {
+const showtimeDateTimeValidator = tryCatch(async (req, res, next) => {
   const data = req.body;
   const tmp = data.date;
 
@@ -75,4 +75,4 @@ const showtimeDateTimeValidate = tryCatch(async (req, res, next) => {
   next();
 });
 
-module.exports = showtimeDateTimeValidate;
+module.exports = showtimeDateTimeValidator;

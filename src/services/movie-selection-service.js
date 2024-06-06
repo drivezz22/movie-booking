@@ -11,7 +11,7 @@ movieSelectionTypeService.findSelectionBySelectionType = (movieSelectTypeId) =>
 movieSelectionTypeService.findSelectionByMovieIdSelectionType = (
   movieId,
   movieSelectTypeId
-) => prisma.movieSelection.findUnique({ where: { movieId, movieSelectTypeId } });
+) => prisma.movieSelection.findFirst({ where: { movieId, movieSelectTypeId } });
 
 movieSelectionTypeService.createSelection = (data) =>
   prisma.movieSelection.create({ data });

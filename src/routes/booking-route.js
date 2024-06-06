@@ -1,7 +1,6 @@
 const express = require("express");
-const { createBookingValidator } = require("../middlewares/validator");
 const bookingController = require("../controllers/booking-controller");
-const failedBookingCheck = require("../middlewares/fail-booking");
+const { createBookingValidator, failedBookingCheck } = require("../middlewares");
 
 const bookingRouter = express.Router();
 
