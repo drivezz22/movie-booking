@@ -92,9 +92,9 @@ model Showtime {
   id             Int      @id @default(autoincrement())
   theaterId      Int
   movieId        Int
-  date           DateTime @db.Date
-  startMovieTime DateTime @db.Time
-  endMovieTime   DateTime @db.Time
+  date           DateTime
+  startMovieTime DateTime
+  endMovieTime   DateTime
 
   theater  Theater   @relation(fields: [theaterId], references: [id])
   movie    Movie     @relation(fields: [movieId], references: [id])

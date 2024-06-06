@@ -6,20 +6,14 @@ const movieSelectionRouter = express.Router();
 
 movieSelectionRouter.post(
   "/",
-  authenticate,
   adminAuthenticate,
   movieSelectionController.createSelection
 );
 movieSelectionRouter.delete(
   "/delete/:movieId",
-  authenticate,
   adminAuthenticate,
   movieSelectionController.deleteSelection
 );
-movieSelectionRouter.get(
-  "/",
-  authenticate,
-  movieSelectionController.getMovieSelectionBySelectionType
-);
+movieSelectionRouter.get("/", movieSelectionController.getMovieSelectionBySelectionType);
 
 module.exports = movieSelectionRouter;
