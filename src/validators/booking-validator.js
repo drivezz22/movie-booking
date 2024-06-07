@@ -1,5 +1,4 @@
 const Joi = require("joi");
-const { paymentType } = require("../models/prisma");
 
 const bookingValidateSchema = {};
 

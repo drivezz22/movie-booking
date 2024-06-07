@@ -1,5 +1,3 @@
-const tryCatch = (func) => {
+module.exports.tryCatch = (func) => {
   return (req, res, next) => func(req, res, next).catch(next);
 };
-
-module.exports = tryCatch;
