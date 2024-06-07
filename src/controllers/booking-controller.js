@@ -1,6 +1,10 @@
 const QRCode = require("qrcode");
 const fs = require("fs-extra");
-const { BOOKING_SEAT_DETAIL_COL, PAYMENT_TYPE } = require("../constants");
+const {
+  BOOKING_SEAT_DETAIL_COL,
+  PAYMENT_TYPE,
+  QRCODE_IMAGE_DIR,
+} = require("../constants");
 const {
   seatService,
   bookingSeatDetialService,
