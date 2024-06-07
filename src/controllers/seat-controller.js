@@ -1,6 +1,5 @@
-const seatService = require("../services/seat-service");
-const createError = require("../utils/create-error");
-const tryCatch = require("../utils/try-catch-wrapper");
+const { seatService } = require("../services");
+const { tryCatch, createError } = require("../utils");
 
 const seatController = {};
 

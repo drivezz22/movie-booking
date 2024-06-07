@@ -1,7 +1,5 @@
-const jwtService = require("../services/jwt-service");
-const userService = require("../services/user-service");
-const createError = require("../utils/create-error");
-const tryCatch = require("../utils/try-catch-wrapper");
+const { jwtService, userService } = require("../services");
+const { tryCatch, createError } = require("../utils");
 
 const authenticate = tryCatch(async (req, res, next) => {
   const authorization = req.headers.authorization;

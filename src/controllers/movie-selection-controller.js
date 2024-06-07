@@ -1,8 +1,6 @@
 const { MOVIE_SELECT_TYPE } = require("../constants");
-const movieSelectionTypeService = require("../services/movie-selection-service");
-const seatService = require("../services/seat-service");
-const createError = require("../utils/create-error");
-const tryCatch = require("../utils/try-catch-wrapper");
+const { movieSelectionTypeService } = require("../services");
+const { tryCatch, createError } = require("../utils");
 
 const movieSelectionController = {};
 

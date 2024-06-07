@@ -1,6 +1,4 @@
-const tryCatch = require("../utils/try-catch-wrapper");
-
-const movieDatatypeConvert = tryCatch(async (req, res, next) => {
+const movieDatatypeConvert = (req, res, next) => {
   if (req.body?.genreId1) {
     req.body.genreId1 = +req.body.genreId1;
   }
@@ -14,6 +12,6 @@ const movieDatatypeConvert = tryCatch(async (req, res, next) => {
     req.body.durationInMin = +req.body.durationInMin;
   }
   next();
-});
+};
 
 module.exports = movieDatatypeConvert;

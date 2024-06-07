@@ -1,8 +1,9 @@
 const multer = require("multer");
+const { MOVIE_IMAGE_DIR } = require("../constants");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./public/images");
+    cb(null, MOVIE_IMAGE_DIR);
   },
   filename: (req, file, cb) => {
     const filename = `${new Date().getTime()}${Math.round(Math.random() * 100000)}.${

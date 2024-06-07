@@ -16,3 +16,6 @@ exports.SEAT_STATUS = {
   UNAVAILABLE: 2,
   BOOKED: 3,
 };
+
+exports.MOVIE_IMAGE_DIR = "./public/images";
+exports.QRCODE_IMAGE_DIR = "./public/qrcodes";

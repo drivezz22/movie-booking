@@ -1,10 +1,7 @@
 const dayjs = require("dayjs");
-const bookingService = require("../services/booking-service");
-const createError = require("../utils/create-error");
-const tryCatch = require("../utils/try-catch-wrapper");
 const { PAYMENT_TYPE } = require("../constants");
-const bookingSeatDetialService = require("../services/booking-seat-detial-service");
-const seatService = require("../services/seat-service");
+const { bookingService, bookingSeatDetialService, seatService } = require("../services");
+const { tryCatch } = require("../utils");
 
 const failedBookingCheck = tryCatch(async (req, res, next) => {
   const bookingDataList = await bookingService.getBookingListByUserId(req.user.id);

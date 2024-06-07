@@ -1,9 +1,6 @@
-const jwtService = require("../services/jwt-service");
-const userService = require("../services/user-service");
-const createError = require("../utils/create-error");
-const tryCatch = require("../utils/try-catch-wrapper");
+const { createError } = require("../utils");
 
-const adminAuthenticate = tryCatch(async (req, res, next) => {
+const adminAuthenticate = (req, res, next) => {
   if (!req.user.isAdmin) {
     createError({
       message: "User has no access rights",
@@ -12,6 +9,5 @@ const adminAuthenticate = tryCatch(async (req, res, next) => {
   }
 
   next();
-});
-
+};
 module.exports = adminAuthenticate;

@@ -1,14 +1,14 @@
 const QRCode = require("qrcode");
 const fs = require("fs-extra");
 const { BOOKING_SEAT_DETAIL_COL, PAYMENT_TYPE } = require("../constants");
-const bookingSeatDetialService = require("../services/booking-seat-detial-service");
-const bookingService = require("../services/booking-service");
-const seatService = require("../services/seat-service");
-const createError = require("../utils/create-error");
-const uploadService = require("../services/upload-service");
-const { paymentType, showtime } = require("../models/prisma");
-const tryCatch = require("../utils/try-catch-wrapper");
-const showtimeService = require("../services/showtime-service");
+const {
+  seatService,
+  bookingSeatDetialService,
+  bookingService,
+  uploadService,
+  showtimeService,
+} = require("../services");
+const { tryCatch, createError } = require("../utils");
 
 const bookingController = {};
 
@@ -64,7 +64,7 @@ bookingController.createBooking = async (req, res, next) => {
       bookingSeatData
     );
 
-    const qrCodePaymentName = `./public/qrcodes/${new Date().getTime()}${Math.round(
+    const qrCodePaymentName = `${QRCODE_IMAGE_DIR}/${new Date().getTime()}${Math.round(
       Math.random() * 100000
     )}_QRCODE_PAYMENT.png`;
 
@@ -84,7 +84,7 @@ bookingController.createBooking = async (req, res, next) => {
   } catch (err) {
     next(err);
   } finally {
-    fs.emptyDirSync("./public/qrcodes");
+    fs.emptyDirSync(QRCODE_IMAGE_DIR);
   }
 };
 
@@ -99,7 +99,7 @@ bookingController.successUpdate = async (req, res, next) => {
 
     await uploadService.delete(existBooking.qrCodeImagePath);
 
-    const qrCodeSuccess = `./public/qrcodes/${new Date().getTime()}${Math.round(
+    const qrCodeSuccess = `${QRCODE_IMAGE_DIR}/${new Date().getTime()}${Math.round(
       Math.random() * 100000
     )}_QRCODE_COMPLETED.png`;
 
@@ -120,7 +120,7 @@ bookingController.successUpdate = async (req, res, next) => {
   } catch (err) {
     next(err);
   } finally {
-    fs.emptyDirSync("./public/qrcodes");
+    fs.emptyDirSync(QRCODE_IMAGE_DIR);
   }
 };
 

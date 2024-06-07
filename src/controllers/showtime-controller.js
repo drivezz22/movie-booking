@@ -1,6 +1,5 @@
-const showtimeService = require("../services/showtime-service");
-const createError = require("../utils/create-error");
-const tryCatch = require("../utils/try-catch-wrapper");
+const { showtimeService } = require("../services");
+const { tryCatch, createError } = require("../utils");
 
 const showtimeController = {};
 

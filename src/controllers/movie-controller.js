@@ -1,8 +1,8 @@
-const movieService = require("../services/movie-service");
-const uploadService = require("../services/upload-service");
-const createError = require("../utils/create-error");
-const tryCatch = require("../utils/try-catch-wrapper");
+const { MOVIE_IMAGE_DIR } = require("../constants");
+const { uploadService, movieService } = require("../services");
+const { tryCatch, createError } = require("../utils");
 const fs = require("fs-extra");
+
 const movieController = {};
 
 movieController.createMovie = async (req, res, next) => {
@@ -18,7 +18,7 @@ movieController.createMovie = async (req, res, next) => {
   } catch (err) {
     next(err);
   } finally {
-    fs.emptyDirSync("./public/images");
+    fs.emptyDirSync(MOVIE_IMAGE_DIR);
   }
 };
 
@@ -44,7 +44,7 @@ movieController.updateMovie = async (req, res, next) => {
   } catch (err) {
     next(err);
   } finally {
-    fs.emptyDirSync("./public/images");
+    fs.emptyDirSync(MOVIE_IMAGE_DIR);
   }
 };
 
