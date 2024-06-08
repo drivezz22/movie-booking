@@ -1,9 +1,10 @@
-const authValidateSchema = require("../validators/auth-validator");
-const bookingValidateSchema = require("../validators/booking-validator");
-const movieSeletionValidateSchema = require("../validators/movie-selection-validator");
-const movieValidateSchema = require("../validators/movie-validator");
-const seatValidateSchema = require("../validators/seat-validator");
-const showtimeValidateSchema = require("../validators/showtime-validation");
+const authValidateSchema = require("./auth-validator");
+const bookingValidateSchema = require("./booking-validator");
+const movieSeletionValidateSchema = require("./movie-selection-validator");
+const movieValidateSchema = require("./movie-validator");
+const seatValidateSchema = require("./seat-validator");
+const showtimeValidateSchema = require("./showtime-validation");
+const highlightValidateSchema = require("./highlight-validator");
 
 module.exports = {
   authValidateSchema,
@@ -12,4 +13,5 @@ module.exports = {
   movieValidateSchema,
   seatValidateSchema,
   showtimeValidateSchema,
+  highlightValidateSchema,
 };

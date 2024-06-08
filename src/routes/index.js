@@ -4,6 +4,7 @@ const seatRouter = require("./seat-route");
 const movieSelectionRouter = require("./movie-selection-route");
 const showtimeRouter = require("./showtime-route");
 const bookingRouter = require("./booking-route");
+const highlightRouter = require("./highlight-route");
 
 module.exports = {
   authRouter,
@@ -12,4 +13,5 @@ module.exports = {
   movieSelectionRouter,
   showtimeRouter,
   bookingRouter,
+  highlightRouter,
 };

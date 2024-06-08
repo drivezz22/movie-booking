@@ -1,3 +1,4 @@
+const { SEAT_TYPE } = require("../../src/constants");
 const { theaterData } = require("./theaterData");
 
 const findSeatsData = () => {
@@ -11,11 +12,11 @@ const findSeatsData = () => {
         seatData.theaterId = count;
         seatData.statusTypeId = 1;
         seatData.row = rowName[row - 1];
-        if (rowName[row - 1] === "A") {
-          seatData.seatTypeId = 2;
+        if (rowName[row - 1].includes("A", "B")) {
+          seatData.seatTypeId = SEAT_TYPE.PREMIUM;
           seatData.price = 500;
         } else {
-          seatData.seatTypeId = 1;
+          seatData.seatTypeId = SEAT_TYPE.NORMAL;
           seatData.price = 200;
         }
         seatData.column = String(col);

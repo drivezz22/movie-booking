@@ -36,6 +36,7 @@ model Movie {
   genre3          GenreType?       @relation(name: "genre3", fields: [genreId3], references: [id])
   movieSelections MovieSelection[]
   showtimes       Showtime[]
+  highlights      Highlight[]
 }
 
 model GenreType {
@@ -76,7 +77,6 @@ model MovieSelectType {
 }
 
 enum MovieSelectionTypeEnum {
-  HIGHLIGHT
   CURRENTLY
   UPCOMING
 }
@@ -178,4 +178,12 @@ model PaymentType {
 enum PaymentStatusEnum {
   PENDING
   SUCCESS
+}
+
+model Highlight {
+  id             Int     @id @default(autoincrement())
+  coverImagePath String
+  highlightWord  String?
+  movieId        Int
+  movie          Movie   @relation(fields: [movieId], references: [id])
 }

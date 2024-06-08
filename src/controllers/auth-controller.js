@@ -8,10 +8,19 @@ authController.register = tryCatch(async (req, res, next) => {
   const existEmail = await userService.findUserByEmail(data?.email);
   const existPhone = await userService.findUserByPhone(data?.phone);
 
-  if (existPhone || existEmail) {
+  if (existEmail) {
     createError({
-      message: "Email or phone number is already in use",
+      message: "Email is already in use",
       statusCode: 400,
+      field: "email",
+    });
+  }
+
+  if (existPhone) {
+    createError({
+      message: "Phone number is already in use",
+      statusCode: 400,
+      field: "phone",
     });
   }
 

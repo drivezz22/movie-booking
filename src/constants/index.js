@@ -1,7 +1,6 @@
 exports.MOVIE_SELECT_TYPE = {
-  HIGHLIGHT: 1,
-  CURRENTLY: 2,
-  UPCOMING: 3,
+  CURRENTLY: 1,
+  UPCOMING: 2,
 };
 
 exports.BOOKING_SEAT_DETAIL_COL = ["seatId1", "seatId2", "seatId3"];
@@ -15,6 +14,11 @@ exports.SEAT_STATUS = {
   AVAILABLE: 1,
   UNAVAILABLE: 2,
   BOOKED: 3,
+};
+
+exports.SEAT_TYPE = {
+  NORMAL: 1,
+  PREMIUM: 2,
 };
 
 exports.MOVIE_IMAGE_DIR = "./public/images";

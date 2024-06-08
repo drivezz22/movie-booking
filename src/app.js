@@ -10,6 +10,7 @@ const {
   movieSelectionRouter,
   showtimeRouter,
   bookingRouter,
+  highlightRouter,
 } = require("./routes");
 
 const app = express();
@@ -24,6 +25,7 @@ app.use("/seats", authenticate, seatRouter);
 app.use("/movie-selection-types", authenticate, movieSelectionRouter);
 app.use("/showtimes", authenticate, showtimeRouter);
 app.use("/bookings", authenticate, bookingRouter);
+app.use("/highlights", authenticate, highlightRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

@@ -6,7 +6,7 @@ const adminAuthenticate = require("./admin-authenticate");
 const upload = require("./upload");
 const movieDatatypeConvert = require("./movie-datatype-convert");
 const showtimeDateTimeValidator = require("./showtime-time-datetime-validate");
-
+const highlightDatatypeConvert = require("./highlight-datatype-convert");
 const {
   registerValidator,
   loginValidator,
@@ -17,6 +17,9 @@ const {
   seatStatusValidator,
   createShowtimeValidator,
   updateShowtimeValidator,
+  createHighlightValidator,
+  updateHighlightValidator,
+  movieSelectionValidator,
 } = require("./validator");
 
 module.exports = {
@@ -28,6 +31,7 @@ module.exports = {
   createBookingValidator,
   failedBookingCheck,
   adminAuthenticate,
+  highlightDatatypeConvert,
   upload,
   movieDatatypeConvert,
   updateMovieValidator,
@@ -37,4 +41,7 @@ module.exports = {
   createShowtimeValidator,
   updateShowtimeValidator,
   showtimeDateTimeValidator,
+  createHighlightValidator,
+  updateHighlightValidator,
+  movieSelectionValidator,
 };

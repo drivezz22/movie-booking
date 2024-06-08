@@ -8,15 +8,15 @@ const {
 
 const seatRouter = express.Router();
 
-seatRouter.post(
-  "/:theaterId/price",
+seatRouter.patch(
+  "/price/:theaterId",
   adminAuthenticate,
   seatPriceValidator,
   seatController.updatePrice
 );
 
-seatRouter.post(
-  "/:theaterId/status",
+seatRouter.patch(
+  "/status/:theaterId/:row/:column",
   adminAuthenticate,
   seatStatusValidator,
   seatController.updateStatus

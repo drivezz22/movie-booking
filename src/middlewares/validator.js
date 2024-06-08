@@ -6,6 +6,7 @@ const {
   movieValidateSchema,
   seatValidateSchema,
   showtimeValidateSchema,
+  highlightValidateSchema,
 } = require("../validators");
 
 const validatorWrapper = (schema, req, res, next) => {
@@ -37,3 +38,7 @@ exports.updateShowtimeValidator = (req, res, next) =>
   validatorWrapper(showtimeValidateSchema.updateShowtime, req, res, next);
 exports.createBookingValidator = (req, res, next) =>
   validatorWrapper(bookingValidateSchema.createBooking, req, res, next);
+exports.createHighlightValidator = (req, res, next) =>
+  validatorWrapper(highlightValidateSchema.create, req, res, next);
+exports.updateHighlightValidator = (req, res, next) =>
+  validatorWrapper(highlightValidateSchema.update, req, res, next);

@@ -9,8 +9,7 @@ movieController.createMovie = async (req, res, next) => {
   try {
     const data = req.body;
     if (req.file) {
-      const movieImageUrl = await uploadService.upload(req.file.path);
-      data.movieImagePath = movieImageUrl;
+      data.movieImagePath = await uploadService.upload(req.file.path);
     }
 
     await movieService.createMovie(data);
@@ -31,12 +30,11 @@ movieController.updateMovie = async (req, res, next) => {
       createError({ message: "No movie in DB", statusCode: 400 });
     }
 
-    if (existMovie.movieImagePath) {
-      await uploadService.delete(existMovie.movieImagePath);
-    }
     if (req.file) {
-      const movieImageUrl = await uploadService.upload(req.file.path);
-      data.movieImagePath = movieImageUrl;
+      if (existMovie.movieImagePath) {
+        await uploadService.delete(existMovie.movieImagePath);
+      }
+      data.movieImagePath = await uploadService.upload(req.file.path);
     }
 
     await movieService.updateMovieById(+movieId, data);
@@ -75,7 +73,7 @@ movieController.getMovie = tryCatch(async (req, res, next) => {
 
 movieController.getAllMovie = tryCatch(async (req, res, next) => {
   const existAllMovie = await movieService.getAllMovie();
-  if (!existAllMovie) {
+  if (existAllMovie.length === 0) {
     createError({ message: "No movie in DB", statusCode: 400 });
   }
 

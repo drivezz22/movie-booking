@@ -23,8 +23,7 @@ seatController.updatePrice = tryCatch(async (req, res, next) => {
 
 seatController.updateStatus = tryCatch(async (req, res, next) => {
   const data = req.body;
-  const { theaterId } = req.params;
-  const { row, column } = req.query;
+  const { theaterId, row, column } = req.params;
 
   const existSeat = await seatService.findSeatByTheaterRowCol(+theaterId, row, column);
   if (!existSeat) {

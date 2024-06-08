@@ -8,6 +8,7 @@ const uploadService = require("./upload-service");
 const showtimeService = require("./showtime-service");
 const movieService = require("./movie-service");
 const movieSelectionTypeService = require("./movie-selection-service");
+const highlightService = require("./highlight-service");
 
 module.exports = {
   hashService,
@@ -20,4 +21,5 @@ module.exports = {
   showtimeService,
   movieService,
   movieSelectionTypeService,
+  highlightService,
 };

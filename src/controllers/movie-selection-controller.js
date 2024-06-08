@@ -1,5 +1,5 @@
 const { MOVIE_SELECT_TYPE } = require("../constants");
-const { movieSelectionTypeService } = require("../services");
+const { movieSelectionTypeService, movieService } = require("../services");
 const { tryCatch, createError } = require("../utils");
 
 const movieSelectionController = {};
@@ -7,46 +7,29 @@ const movieSelectionController = {};
 movieSelectionController.createSelection = tryCatch(async (req, res, next) => {
   const data = req.body;
 
-  const existMovieSelectionList = await movieSelectionTypeService.findSelectionByMovieId(
+  const existMovie = await movieService.getMovieById(data.movieId);
+
+  if (!existMovie) {
+    createError({
+      message: "No movie in DB",
+      statusCode: 400,
+    });
+  }
+
+  const existMovieSelection = await movieSelectionTypeService.findSelectionByMovieId(
     data.movieId
   );
 
-  if (existMovieSelectionList.length > 0) {
-    existMovieSelectionList.forEach((el) => {
-      if (el.movieSelectTypeId === MOVIE_SELECT_TYPE.UPCOMING) {
-        createError({
-          message: "Cannot add selection type because the movie is already upcoming",
-          statusCode: 400,
-        });
-      }
-
-      if (
-        data.movieSelectTypeId === MOVIE_SELECT_TYPE.UPCOMING &&
-        (el.movieSelectTypeId === MOVIE_SELECT_TYPE.HIGHLIGHT ||
-          el.movieSelectTypeId === MOVIE_SELECT_TYPE.CURRENTLY)
-      ) {
-        createError({
-          message:
-            "Cannot add selection type because the movie is already another selection",
-          statusCode: 400,
-        });
-      }
-
-      if (el.movieSelectTypeId === data.movieSelectTypeId) {
-        createError({
-          message: "This movie already contains the selected movie",
-          statusCode: 400,
-        });
-      }
+  if (existMovieSelection) {
+    createError({
+      message: "The movie already has selection type",
+      statusCode: 400,
     });
   }
-  if (
-    data.movieSelectTypeId === MOVIE_SELECT_TYPE.HIGHLIGHT &&
-    existMovieSelectionList.length === 0
-  ) {
+
+  if (!Object.values(MOVIE_SELECT_TYPE).includes(data.movieSelectTypeId)) {
     createError({
-      message:
-        "Cannot add highlight on this movie, please add movie in currently selection before",
+      message: "The movieSelectTypeId is wrong",
       statusCode: 400,
     });
   }
@@ -55,22 +38,43 @@ movieSelectionController.createSelection = tryCatch(async (req, res, next) => {
   res.status(201).json({ message: "Movie selection is created" });
 });
 
-movieSelectionController.deleteSelection = tryCatch(async (req, res, next) => {
-  const { movieSelectType } = req.query;
-  const movieSelectTypeId = MOVIE_SELECT_TYPE[movieSelectType.toUpperCase()];
+movieSelectionController.updateSelection = tryCatch(async (req, res, next) => {
+  const data = req.body;
   const { movieId } = req.params;
-  const existMovieSelection =
-    await movieSelectionTypeService.findSelectionByMovieIdSelectionType(
-      +movieId,
-      movieSelectTypeId
-    );
+
+  const existMovieSelection = await movieSelectionTypeService.findSelectionByMovieId(
+    +movieId
+  );
+
   if (!existMovieSelection) {
     createError({
-      message: "No movie selection in DB",
+      message: "The movie is no selection type",
       statusCode: 400,
     });
   }
 
+  if (!Object.values(MOVIE_SELECT_TYPE).includes(data.movieSelectTypeId)) {
+    createError({
+      message: "The movieSelectTypeId is wrong",
+      statusCode: 400,
+    });
+  }
+
+  await movieSelectionTypeService.updateSelectionById(existMovieSelection.id, data);
+  res.status(201).json({ message: "Movie selection is updated" });
+});
+
+movieSelectionController.deleteSelection = tryCatch(async (req, res, next) => {
+  const { movieId } = req.params;
+  const existMovieSelection = await movieSelectionTypeService.findSelectionByMovieId(
+    +movieId
+  );
+  if (!existMovieSelection) {
+    createError({
+      message: "The movie is no selection type",
+      statusCode: 400,
+    });
+  }
   await movieSelectionTypeService.deleteSelectionById(existMovieSelection.id);
   res.status(204).end();
 });
@@ -83,7 +87,7 @@ movieSelectionController.getMovieSelectionBySelectionType = tryCatch(
     const existMovieSelectionList =
       await movieSelectionTypeService.findSelectionBySelectionType(movieSelectTypeId);
 
-    if (existMovieSelectionList.length === 0 || movieSelectType) {
+    if (existMovieSelectionList.length === 0 || !movieSelectType) {
       createError({
         message: "No movie selection in DB",
         statusCode: 400,
