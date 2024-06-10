@@ -62,8 +62,6 @@ bookingController.createBooking = async (req, res, next) => {
       }
     });
 
-    await seatService.updateBookedStatusByIdList(seatQuery);
-
     const bookingSeatDetial = await bookingSeatDetialService.createBookingSeats(
       bookingSeatData
     );
@@ -72,8 +70,7 @@ bookingController.createBooking = async (req, res, next) => {
       Math.random() * 100000
     )}_QRCODE_PAYMENT.png`;
 
-    await QRCode.toFile(qrCodePaymentName, process.env.FRONTEND_PAYMENT_PATH);
-
+    await QRCode.toFile(qrCodePaymentName, data.paymentPath);
     const qrCodeImagePath = await uploadService.upload(qrCodePaymentName);
 
     const bookingData = {
@@ -82,7 +79,11 @@ bookingController.createBooking = async (req, res, next) => {
       qrCodeImagePath,
       paymentTypeId: PAYMENT_TYPE.PENDING,
     };
+
+    delete bookingData.paymentPath;
+
     const booking = await bookingService.createBooking(bookingData);
+    await seatService.updateBookedStatusByIdList(seatQuery);
 
     res.status(201).json({ message: "Booking is created", booking });
   } catch (err) {
