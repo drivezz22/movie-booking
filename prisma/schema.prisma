@@ -160,6 +160,7 @@ model Booking {
   paymentTypeId        Int
   userId               Int
   qrCodeImagePath      String
+  totalPrice           Int
   createdAt            DateTime @default(now()) @db.Timestamp(0)
   updatedAt            DateTime @updatedAt @db.Timestamp(0)
 

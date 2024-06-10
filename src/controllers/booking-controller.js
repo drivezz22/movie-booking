@@ -101,6 +101,10 @@ bookingController.successUpdate = async (req, res, next) => {
       createError({ message: "No booking id in DB", statusCode: 400 });
     }
 
+    if (existBooking.paymentTypeId === PAYMENT_TYPE.SUCCESS) {
+      createError({ message: "Already Payment", statusCode: 400 });
+    }
+
     await uploadService.delete(existBooking.qrCodeImagePath);
 
     const qrCodeSuccess = `${QRCODE_IMAGE_DIR}/${new Date().getTime()}${Math.round(
