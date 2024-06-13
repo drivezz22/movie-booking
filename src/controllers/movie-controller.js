@@ -12,8 +12,8 @@ movieController.createMovie = async (req, res, next) => {
       data.movieImagePath = await uploadService.upload(req.file.path);
     }
 
-    await movieService.createMovie(data);
-    res.status(201).json({ message: "Movie is created" });
+    const result = await movieService.createMovie(data);
+    res.status(201).json({ message: "Movie is created", movieData: result });
   } catch (err) {
     next(err);
   } finally {
