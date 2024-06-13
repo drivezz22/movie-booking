@@ -10,7 +10,10 @@ const { userData } = require("./mock/userData");
 
 const prisma = new PrismaClient();
 
+const TIMEZONE = "+07:00";
+
 const initialRun = async () => {
+  await prisma.$executeRawUnsafe(`SET time_zone = ${TIMEZONE}`);
   await prisma.user.createMany({ data: userData });
   await prisma.seatType.createMany({ data: seatTypeData });
   await prisma.statusType.createMany({ data: statusTypeData });
