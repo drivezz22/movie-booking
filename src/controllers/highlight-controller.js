@@ -25,8 +25,8 @@ highlightController.createHighlight = async (req, res, next) => {
 
     data.coverImagePath = await uploadService.upload(req.file.path);
 
-    await highlightService.createHighlight(data);
-    res.status(201).json({ message: "Highlight is created" });
+    const result = await highlightService.createHighlight(data);
+    res.status(201).json({ message: "Highlight is created", highlightData: result });
   } catch (err) {
     next(err);
   } finally {
@@ -51,8 +51,8 @@ highlightController.updateHighlight = async (req, res, next) => {
       data.coverImagePath = await uploadService.upload(req.file.path);
     }
 
-    await highlightService.updateHighlightById(existHighlight.id, data);
-    res.status(200).json({ message: "Highlight is updated" });
+    const result = await highlightService.updateHighlightById(existHighlight.id, data);
+    res.status(200).json({ message: "Highlight is updated", highlightData: result });
   } catch (err) {
     next(err);
   } finally {
