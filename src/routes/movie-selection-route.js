@@ -21,6 +21,15 @@ movieSelectionRouter.delete(
   adminAuthenticate,
   movieSelectionController.deleteSelection
 );
-movieSelectionRouter.get("/", movieSelectionController.getMovieSelectionBySelectionType);
+movieSelectionRouter.get(
+  "/:selectionType",
+  movieSelectionController.getMovieSelectionBySelectionType
+);
+movieSelectionRouter.get("/", movieSelectionController.getMovieSelectionByForAllMovie);
+
+movieSelectionRouter.get(
+  "/:movieId",
+  movieSelectionController.getMovieSelectionByMovieId
+);
 
 module.exports = movieSelectionRouter;

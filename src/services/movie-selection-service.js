@@ -8,6 +8,9 @@ movieSelectionTypeService.findSelectionByMovieId = (movieId) =>
 movieSelectionTypeService.findSelectionBySelectionType = (movieSelectTypeId) =>
   prisma.movieSelection.findMany({ where: { movieSelectTypeId } });
 
+movieSelectionTypeService.findSelectionByAllMovie = () =>
+  prisma.movieSelection.findMany();
+
 movieSelectionTypeService.findSelectionByMovieIdSelectionType = (
   movieId,
   movieSelectTypeId
@@ -16,10 +19,10 @@ movieSelectionTypeService.findSelectionByMovieIdSelectionType = (
 movieSelectionTypeService.createSelection = (data) =>
   prisma.movieSelection.create({ data });
 
-movieSelectionTypeService.deleteSelectionById = (id) =>
-  prisma.movieSelection.delete({ where: { id } });
+movieSelectionTypeService.deleteSelectionByMovieId = (movieId) =>
+  prisma.movieSelection.deleteMany({ where: { movieId } });
 
-movieSelectionTypeService.updateSelectionById = (id, data) =>
-  prisma.movieSelection.update({ data, where: { id } });
+movieSelectionTypeService.updateSelectionByMovieId = (movieId, data) =>
+  prisma.movieSelection.updateMany({ data, where: { movieId } });
 
 module.exports = movieSelectionTypeService;

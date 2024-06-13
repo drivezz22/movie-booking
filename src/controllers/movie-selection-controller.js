@@ -60,7 +60,7 @@ movieSelectionController.updateSelection = tryCatch(async (req, res, next) => {
     });
   }
 
-  await movieSelectionTypeService.updateSelectionById(existMovieSelection.id, data);
+  await movieSelectionTypeService.updateSelectionByMovieId(+movieId, data);
   res.status(201).json({ message: "Movie selection is updated" });
 });
 
@@ -75,19 +75,26 @@ movieSelectionController.deleteSelection = tryCatch(async (req, res, next) => {
       statusCode: 400,
     });
   }
-  await movieSelectionTypeService.deleteSelectionById(existMovieSelection.id);
+  await movieSelectionTypeService.deleteSelectionByMovieId(+movieId);
   res.status(204).end();
 });
 
 movieSelectionController.getMovieSelectionBySelectionType = tryCatch(
   async (req, res, next) => {
-    const { movieSelectType } = req.query;
-    const movieSelectTypeId = MOVIE_SELECT_TYPE[movieSelectType.toUpperCase()];
+    const { selectionType } = req.params;
+    const movieSelectTypeId = MOVIE_SELECT_TYPE[selectionType.toUpperCase()];
+
+    if (!movieSelectTypeId) {
+      createError({
+        message: "No this selection type",
+        statusCode: 400,
+      });
+    }
 
     const existMovieSelectionList =
       await movieSelectionTypeService.findSelectionBySelectionType(movieSelectTypeId);
 
-    if (existMovieSelectionList.length === 0 || !movieSelectType) {
+    if (existMovieSelectionList.length === 0) {
       createError({
         message: "No movie selection in DB",
         statusCode: 400,
@@ -96,5 +103,22 @@ movieSelectionController.getMovieSelectionBySelectionType = tryCatch(
     res.status(200).json({ movieDataList: existMovieSelectionList });
   }
 );
+
+movieSelectionController.getMovieSelectionByForAllMovie = tryCatch(
+  async (req, res, next) => {
+    const existMovieSelectionList =
+      await movieSelectionTypeService.findSelectionByAllMovie();
+
+    res.status(200).json({ movieDataList: existMovieSelectionList });
+  }
+);
+
+movieSelectionController.getMovieSelectionByMovieId = tryCatch(async (req, res, next) => {
+  const { movieId } = req.params;
+  const existMovieSelection = await movieSelectionTypeService.findSelectionByMovieId(
+    +movieId
+  );
+  res.status(200).json({ movieData: existMovieSelection });
+});
 
 module.exports = movieSelectionController;

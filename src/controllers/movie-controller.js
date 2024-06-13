@@ -24,6 +24,7 @@ movieController.createMovie = async (req, res, next) => {
 movieController.updateMovie = async (req, res, next) => {
   try {
     const data = req.body;
+    console.log(data);
     const { movieId } = req.params;
     const existMovie = await movieService.getMovieById(+movieId);
     if (!existMovie) {
@@ -37,8 +38,8 @@ movieController.updateMovie = async (req, res, next) => {
       data.movieImagePath = await uploadService.upload(req.file.path);
     }
 
-    await movieService.updateMovieById(+movieId, data);
-    res.status(200).json({ message: "Movie is updated" });
+    const result = await movieService.updateMovieById(+movieId, data);
+    res.status(200).json({ message: "Movie is updated", movieData: result });
   } catch (err) {
     next(err);
   } finally {
