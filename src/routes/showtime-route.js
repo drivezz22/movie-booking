@@ -4,7 +4,6 @@ const {
   adminAuthenticate,
   createShowtimeValidator,
   showtimeDateTimeValidator,
-  updateShowtimeValidator,
 } = require("../middlewares");
 
 const showtimeRouter = express.Router();
@@ -17,25 +16,22 @@ showtimeRouter.post(
   showtimeController.createShowtime
 );
 
-showtimeRouter.patch(
-  "/:showtimeId/update",
+showtimeRouter.delete(
+  "/date/:date/theater/:theaterId",
   adminAuthenticate,
-  showtimeDateTimeValidator,
-  updateShowtimeValidator,
-  showtimeController.updateShowtime
+  showtimeController.deleteShowtimeByDateAndTheater
 );
 
-showtimeRouter.delete(
-  "/:showtimeId/delete",
-  adminAuthenticate,
-  showtimeController.deleteShowtime
+showtimeRouter.get(
+  "/startDate/:startDate/endDate/:endDate",
+  showtimeController.getShowtimeByStartEndDate
+);
+
+showtimeRouter.get(
+  "/movie/:movieId/startDate/:startDate/endDate/:endDate",
+  showtimeController.getShowtimeByMovieStartEndDate
 );
 
 showtimeRouter.get("/:showtimeId", showtimeController.getShowtime);
-
-showtimeRouter.get(
-  "/movie/:movieId/theater/:theaterId",
-  showtimeController.getShowtimeByMovieAndTheater
-);
 
 module.exports = showtimeRouter;

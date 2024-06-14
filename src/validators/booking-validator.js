@@ -7,6 +7,7 @@ bookingValidateSchema.createBooking = Joi.object({
   userId: Joi.number().required(),
   totalPrice: Joi.number().required(),
   paymentPath: Joi.string().required(),
+  seatQuery: Joi.array(),
 });
 
 module.exports = bookingValidateSchema;

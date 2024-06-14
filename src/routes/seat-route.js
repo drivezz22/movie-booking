@@ -23,5 +23,9 @@ seatRouter.patch(
 );
 
 seatRouter.get("/:theaterId", seatController.getSeatDetail);
+seatRouter.get(
+  "/seatId/theaterId/:theaterId/row/:row/column/:column",
+  seatController.getSeatId
+);
 
 module.exports = seatRouter;

@@ -7,8 +7,25 @@ bookingService.getBookingById = (id) => prisma.booking.findUnique({ where: { id 
 bookingService.updateBookingById = (id, data) =>
   prisma.booking.update({ data, where: { id } });
 bookingService.getBookingListByUserId = (userId) =>
-  prisma.booking.findMany({ where: { userId } });
+  prisma.booking.findMany({
+    where: { userId },
+    include: {
+      showtime: { include: { movie: true, theater: true } },
+      bookingSeatsDetail: { include: { seat1: true, seat2: true, seat3: true } },
+      paymentType: true,
+    },
+  });
 bookingService.deleteBookingsByIdList = (IdList) =>
   prisma.booking.deleteMany({ where: { id: { in: IdList } } });
 
+bookingService.findBookingByShowtimeIdList = (showtimeIdList) =>
+  prisma.booking.findMany({ where: { showtimeId: { in: showtimeIdList } } });
+
+bookingService.findBookingByShowtimeId = (showtimeId) =>
+  prisma.booking.findMany({
+    where: { showtimeId },
+    include: {
+      bookingSeatsDetail: { include: { seat1: true, seat2: true, seat3: true } },
+    },
+  });
 module.exports = bookingService;

@@ -14,7 +14,7 @@ seatService.findBookedSeatsByIdList = (idList) =>
   });
 
 seatService.findSeatByTheaterRowCol = (theaterId, row, column) =>
-  prisma.seat.findFirst({ where: { theaterId, row, column } });
+  prisma.seat.findFirst({ where: { theaterId, row: row, column } });
 
 seatService.findSeatsByTheaterSeatType = (theaterId, seatTypeId) =>
   prisma.seat.findFirst({ where: { theaterId, seatTypeId } });

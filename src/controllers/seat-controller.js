@@ -51,4 +51,17 @@ seatController.getSeatDetail = tryCatch(async (req, res, next) => {
   });
 });
 
+seatController.getSeatId = tryCatch(async (req, res, next) => {
+  const { theaterId, row, column } = req.params;
+
+  const existSeat = await seatService.findSeatByTheaterRowCol(+theaterId, row, column);
+  if (!existSeat) {
+    createError({ message: "Cannot find seats in DB", statusCode: 400 });
+  }
+
+  res.status(200).json({
+    seatDetail: existSeat,
+  });
+});
+
 module.exports = seatController;
