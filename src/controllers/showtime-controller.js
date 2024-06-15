@@ -41,7 +41,6 @@ showtimeController.deleteShowtimeByDateAndTheater = tryCatch(async (req, res, ne
     dateFormat,
     +theaterId
   );
-  console.log("existShowtimeList", existShowtimeList);
 
   const showtimeIdList = existShowtimeList.map((el) => el.id);
 
@@ -49,7 +48,6 @@ showtimeController.deleteShowtimeByDateAndTheater = tryCatch(async (req, res, ne
     showtimeIdList
   );
 
-  console.log("existBookingList", existBookingList);
   if (!existBookingList) {
     createError({ message: "Some showtime is booking", statusCode: 400 });
   }

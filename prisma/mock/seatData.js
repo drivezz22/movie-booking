@@ -10,7 +10,6 @@ const findSeatsData = () => {
       for (let col = 1; col <= columnNum; col++) {
         const seatData = {};
         seatData.theaterId = count;
-        seatData.statusTypeId = 1;
         seatData.row = rowName[row - 1];
         if (rowName[row - 1].includes("A", "B")) {
           seatData.seatTypeId = SEAT_TYPE.PREMIUM;

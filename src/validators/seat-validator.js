@@ -7,8 +7,4 @@ seatValidateSchema.price = Joi.object({
   seatTypeId: Joi.number(),
 });
 
-seatValidateSchema.status = Joi.object({
-  statusTypeId: Joi.number(),
-});
-
 module.exports = seatValidateSchema;

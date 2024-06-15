@@ -13,17 +13,14 @@ const {
   showtimeService,
 } = require("../services");
 const { tryCatch, createError } = require("../utils");
+const { theater } = require("../models/prisma");
 
 const bookingController = {};
 
 bookingController.createBooking = async (req, res, next) => {
   try {
     const data = req.body;
-    console.log(data);
-    if (data.userId !== req.user.id) {
-      createError({ message: "Unauthorized to execute this action", statusCode: 400 });
-    }
-
+    data.userId = req.user.id;
     if (data.seatQuery.length === 0) {
       createError({ message: "No seatId in query params", statusCode: 400 });
     }
@@ -32,14 +29,36 @@ bookingController.createBooking = async (req, res, next) => {
       createError({ message: "Seat limit: 3 seats per booking", statusCode: 400 });
     }
 
+    const existShowtime = await showtimeService.getShowtimeById(data.showtimeId);
+    if (!existShowtime) {
+      createError({ message: "No showtime is DB", statusCode: 400 });
+    }
+
+    const existSeats = await seatService.findSeatsByIdList(data.seatQuery);
+
+    existSeats.forEach((el) => {
+      if (el.theaterId !== existShowtime.theaterId) {
+        createError({ message: "Seat are wrong theater", statusCode: 400 });
+      }
+    });
+
     const existSeatList = await seatService.findSeatsByIdList(data.seatQuery);
     if (data.seatQuery.length !== existSeatList.length) {
       createError({ message: "Some seatId not in DB", statusCode: 400 });
     }
+    const allBookingByShowTimeId = await bookingService.findBookingByShowtimeId(
+      data.showtimeId
+    );
 
-    const existShowtime = await showtimeService.getShowtimeById(data.showtimeId);
-    if (!existShowtime) {
-      createError({ message: "No showtime is DB", statusCode: 400 });
+    const getAllBookedIdList = allBookingByShowTimeId.map((el) => [
+      el.bookingSeatsDetail.seatId1,
+      el.bookingSeatsDetail.seatId2,
+      el.bookingSeatsDetail.seatId3,
+    ]);
+    const flatArray = getAllBookedIdList.flat().filter((n) => n);
+
+    if (data.seatQuery.some((el) => flatArray.includes(el))) {
+      createError({ message: "Seats are already booked", statusCode: 400 });
     }
 
     const bookingSeatData = {};
@@ -47,35 +66,14 @@ bookingController.createBooking = async (req, res, next) => {
       bookingSeatData[BOOKING_SEAT_DETAIL_COL[idx]] = data.seatQuery[idx];
     }
 
-    const bookedSeat = await seatService.findBookedSeatsByIdList(data.seatQuery);
-
-    if (bookedSeat.length > 0) {
-      createError({ message: "Seats are already booked", statusCode: 400 });
-    }
-
-    const existSeat = await seatService.findSeatsByIdList(data.seatQuery);
-
-    existSeat.forEach((el) => {
-      if (el.theaterId !== existShowtime.theaterId) {
-        createError({ message: "Seat are wrong theater", statusCode: 400 });
-      }
-    });
-
     const bookingSeatDetial = await bookingSeatDetialService.createBookingSeats(
       bookingSeatData
     );
 
-    const qrCodePaymentName = `${QRCODE_IMAGE_DIR}/${new Date().getTime()}${Math.round(
-      Math.random() * 100000
-    )}_QRCODE_PAYMENT.png`;
-
-    await QRCode.toFile(qrCodePaymentName, data.paymentPath);
-    const qrCodeImagePath = await uploadService.upload(qrCodePaymentName);
-
     const bookingData = {
       ...data,
       bookingSeatsDetailId: bookingSeatDetial.id,
-      qrCodeImagePath,
+      qrCodeImagePath: "waiting upload",
       paymentTypeId: PAYMENT_TYPE.PENDING,
     };
 
@@ -83,9 +81,19 @@ bookingController.createBooking = async (req, res, next) => {
     delete bookingData.seatQuery;
 
     const booking = await bookingService.createBooking(bookingData);
-    await seatService.updateBookedStatusByIdList(data.seatQuery);
 
-    res.status(201).json({ message: "Booking is created", booking });
+    const qrCodePaymentName = `${QRCODE_IMAGE_DIR}/${new Date().getTime()}${Math.round(
+      Math.random() * 100000
+    )}_QRCODE_PAYMENT.png`;
+
+    await QRCode.toFile(qrCodePaymentName, `${process.env.PAYMENT_PATH}/${booking.id}`);
+    const qrCodeImagePath = await uploadService.upload(qrCodePaymentName);
+
+    const updateDate = await bookingService.updateBookingById(booking.id, {
+      qrCodeImagePath,
+    });
+
+    res.status(201).json({ message: "Booking is created", booking: updateDate });
   } catch (err) {
     next(err);
   } finally {
@@ -133,7 +141,7 @@ bookingController.successUpdate = async (req, res, next) => {
   }
 };
 
-bookingController.getAllBooking = tryCatch(async (req, res, next) => {
+bookingController.getAllBooking = tryCatch(async (req, res) => {
   const bookingDataList = await bookingService.getBookingListByUserId(req.user.id);
   if (bookingDataList.length === 0) {
     createError({ message: "No booking for this user", statusCode: 400 });
@@ -142,14 +150,61 @@ bookingController.getAllBooking = tryCatch(async (req, res, next) => {
   res.status(200).json({ bookingDataList });
 });
 
-bookingController.getBookingByShowtimeId = tryCatch(async (req, res, next) => {
+bookingController.getBookingByShowtimeId = tryCatch(async (req, res) => {
   const { showtimeId } = req.params;
   const bookingDataList = await bookingService.findBookingByShowtimeId(+showtimeId);
   if (bookingDataList.length === 0) {
-    createError({ message: "No showtime", statusCode: 400 });
+    return res.status(200).json({});
   }
 
   res.status(200).json({ bookingDataList });
+});
+
+bookingController.getBookingById = tryCatch(async (req, res) => {
+  const { bookingId } = req.params;
+  const bookingData = await bookingService.getBookingByIdAndUserId(
+    +bookingId,
+    req.user.id
+  );
+
+  if (!bookingData) {
+    createError({ message: "No booking", statusCode: 400 });
+  }
+
+  res.status(200).json({ bookingData });
+});
+
+bookingController.getBookedSeat = tryCatch(async (req, res) => {
+  const { showtimeId } = req.params;
+  const allBookingByShowTimeId = await bookingService.findBookingByShowtimeId(
+    +showtimeId
+  );
+  const seatData = [];
+  allBookingByShowTimeId.map((el) => {
+    if (el.bookingSeatsDetail.seatId1) {
+      seatData.push({
+        row: el.bookingSeatsDetail.seat1.row,
+        column: el.bookingSeatsDetail.seat1.column,
+        theaterId: el.showtime.theater.id,
+      });
+    }
+    if (el.bookingSeatsDetail.seatId2) {
+      seatData.push({
+        row: el.bookingSeatsDetail.seat2.row,
+        column: el.bookingSeatsDetail.seat2.column,
+        theaterId: el.showtime.theater.id,
+      });
+    }
+    if (el.bookingSeatsDetail.seatId3)
+      seatData.push({
+        row: el.bookingSeatsDetail.seat3.row,
+        column: el.bookingSeatsDetail.seat3.column,
+        theaterId: el.showtime.theater.id,
+      });
+    return seatData;
+  });
+
+  res.status(200).json({ bookedSeats: seatData });
 });
 
 module.exports = bookingController;

@@ -17,6 +17,8 @@ movieService.deleteMovieById = (movieId) =>
   });
 
 movieService.getAllMovie = () =>
-  prisma.movie.findMany({ include: { genre1: true, genre2: true, genre3: true } });
+  prisma.movie.findMany({
+    include: { genre1: true, genre2: true, genre3: true, movieSelections: true },
+  });
 
 module.exports = movieService;

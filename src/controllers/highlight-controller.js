@@ -78,7 +78,7 @@ highlightController.deleteHighlight = tryCatch(async (req, res, next) => {
 highlightController.getAllHighlight = tryCatch(async (req, res, next) => {
   const existAllHighlight = await highlightService.getAllHighlight();
   if (existAllHighlight.length === 0) {
-    createError({ message: "No highlight in DB", statusCode: 400 });
+    return res.status(200).json({ highlightList: [] });
   }
 
   res.status(200).json({ highlightList: existAllHighlight });

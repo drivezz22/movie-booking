@@ -21,22 +21,6 @@ seatController.updatePrice = tryCatch(async (req, res, next) => {
   });
 });
 
-seatController.updateStatus = tryCatch(async (req, res, next) => {
-  const data = req.body;
-  const { theaterId, row, column } = req.params;
-
-  const existSeat = await seatService.findSeatByTheaterRowCol(+theaterId, row, column);
-  if (!existSeat) {
-    createError({ message: "Cannot find seats in DB", statusCode: 400 });
-  }
-
-  await seatService.updateStatusById(data.statusTypeId, existSeat.id);
-  res.status(200).json({
-    message: `SeatId :${row}${column} on theaterId : ${theaterId}, status is updated`,
-  });
-  console.log(existSeat);
-});
-
 seatController.getSeatDetail = tryCatch(async (req, res, next) => {
   const { theaterId } = req.params;
   const { row, column } = req.query;

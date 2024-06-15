@@ -26,6 +26,11 @@ bookingService.findBookingByShowtimeId = (showtimeId) =>
     where: { showtimeId },
     include: {
       bookingSeatsDetail: { include: { seat1: true, seat2: true, seat3: true } },
+      showtime: { include: { theater: true } },
     },
   });
+
+bookingService.getBookingByIdAndUserId = (bookingId, userId) =>
+  prisma.booking.findFirst({ where: { id: bookingId, userId: userId } });
+
 module.exports = bookingService;

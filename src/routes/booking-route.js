@@ -12,5 +12,12 @@ bookingRouter.get(
   failedBookingCheck,
   bookingController.getBookingByShowtimeId
 );
+bookingRouter.get("/:bookingId", failedBookingCheck, bookingController.getBookingById);
+
+bookingRouter.get(
+  "/showtime/:showtimeId/booked-seat",
+  failedBookingCheck,
+  bookingController.getBookedSeat
+);
 
 module.exports = bookingRouter;

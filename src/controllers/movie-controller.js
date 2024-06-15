@@ -24,7 +24,6 @@ movieController.createMovie = async (req, res, next) => {
 movieController.updateMovie = async (req, res, next) => {
   try {
     const data = req.body;
-    console.log(data);
     const { movieId } = req.params;
     const existMovie = await movieService.getMovieById(+movieId);
     if (!existMovie) {

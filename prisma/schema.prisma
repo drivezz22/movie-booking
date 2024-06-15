@@ -102,20 +102,18 @@ model Showtime {
 }
 
 model Seat {
-  id           Int    @id @default(autoincrement())
-  theaterId    Int
-  statusTypeId Int
-  seatTypeId   Int
-  row          String @db.VarChar(1)
-  column       String @db.VarChar(1)
-  price        Int
+  id         Int    @id @default(autoincrement())
+  theaterId  Int
+  seatTypeId Int
+  row        String @db.VarChar(1)
+  column     String @db.VarChar(1)
+  price      Int
 
-  theater    Theater              @relation(fields: [theaterId], references: [id])
-  statusType StatusType           @relation(fields: [statusTypeId], references: [id])
-  seatType   SeatType             @relation(fields: [seatTypeId], references: [id])
-  seat1      BookingSeatsDetail[] @relation(name: "seat1")
-  seat2      BookingSeatsDetail[] @relation(name: "seat2")
-  seat3      BookingSeatsDetail[] @relation(name: "seat3")
+  theater  Theater              @relation(fields: [theaterId], references: [id])
+  seatType SeatType             @relation(fields: [seatTypeId], references: [id])
+  seat1    BookingSeatsDetail[] @relation(name: "seat1")
+  seat2    BookingSeatsDetail[] @relation(name: "seat2")
+  seat3    BookingSeatsDetail[] @relation(name: "seat3")
 }
 
 model SeatType {
@@ -127,18 +125,6 @@ model SeatType {
 enum SeatTypeNameEnum {
   NORMAL
   PREMIUM
-}
-
-model StatusType {
-  id         Int            @id @default(autoincrement())
-  statusType StatusTypeEnum
-  seats      Seat[]
-}
-
-enum StatusTypeEnum {
-  AVAILABLE
-  UNAVAILABLE
-  BOOKED
 }
 
 model BookingSeatsDetail {

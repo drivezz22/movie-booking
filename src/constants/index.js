@@ -10,12 +10,6 @@ exports.PAYMENT_TYPE = {
   SUCCESS: 2,
 };
 
-exports.SEAT_STATUS = {
-  AVAILABLE: 1,
-  UNAVAILABLE: 2,
-  BOOKED: 3,
-};
-
 exports.SEAT_TYPE = {
   NORMAL: 1,
   PREMIUM: 2,
