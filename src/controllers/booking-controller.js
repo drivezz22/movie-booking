@@ -13,7 +13,6 @@ const {
   showtimeService,
 } = require("../services");
 const { tryCatch, createError } = require("../utils");
-const { theater } = require("../models/prisma");
 
 const bookingController = {};
 

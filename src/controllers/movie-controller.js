@@ -1,5 +1,11 @@
 const { MOVIE_IMAGE_DIR } = require("../constants");
-const { uploadService, movieService } = require("../services");
+const { highlight } = require("../models/prisma");
+const {
+  uploadService,
+  movieService,
+  highlightService,
+  movieSelectionTypeService,
+} = require("../services");
 const { tryCatch, createError } = require("../utils");
 const fs = require("fs-extra");
 
@@ -50,13 +56,15 @@ movieController.deleteMovie = tryCatch(async (req, res, next) => {
   const { movieId } = req.params;
   const existMovie = await movieService.getMovieById(+movieId);
   if (!existMovie) {
-    createError({ message: "No movie in DB", statusCode: 400 });
+    return res.status(204).end();
   }
 
   if (existMovie.movieImagePath) {
     await uploadService.delete(existMovie.movieImagePath);
   }
 
+  await highlightService.deleteHighlightByMovieId(+movieId);
+  await movieSelectionTypeService.deleteSelectionByMovieId(+movieId);
   await movieService.deleteMovieById(+movieId);
   res.status(204).end();
 });
