@@ -1,5 +1,4 @@
 const { MOVIE_IMAGE_DIR } = require("../constants");
-const { highlight } = require("../models/prisma");
 const {
   uploadService,
   movieService,
