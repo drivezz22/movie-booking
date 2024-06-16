@@ -28,7 +28,8 @@ showtimeService.getShowtimeByDateAndTheater = (date, theaterId) =>
 showtimeService.getShowtimeByStartEndDate = (startDate, endDate) =>
   prisma.showtime.findMany({
     where: { AND: [{ date: { gte: startDate } }, { date: { lte: endDate } }] },
-    include: { theater: true, movie: true },
+    include: { theater: true, movie: true, bookings: true },
+    orderBy: { startMovieTime: "asc" },
   });
 
 showtimeService.getShowtimeByMovieStartEndDate = (movieId, startDate, endDate) =>
