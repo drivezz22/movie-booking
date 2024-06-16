@@ -1,5 +1,4 @@
 const { MOVIE_IMAGE_DIR } = require("../constants");
-const { showtime } = require("../models/prisma");
 const {
   uploadService,
   movieService,
@@ -64,7 +63,7 @@ movieController.deleteMovie = tryCatch(async (req, res, next) => {
     await uploadService.delete(existMovie.movieImagePath);
   }
 
-  const existShowtime = await showtimeService.getShowtimeByMovieId(+movieId);
+  const existShowtime = await showtimeService.getShowtimeByMovieStartEndDate(+movieId);
 
   if (existShowtime.length > 0) {
     createError({
