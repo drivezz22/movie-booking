@@ -21,25 +21,9 @@ const failedBookingCheck = tryCatch(async (req, res, next) => {
     }
   });
 
-  const bookingSeatDetial = await bookingSeatDetialService.getBookingSeatsByIdList(
-    deleteBookingSeatIdList
-  );
-
-  const changeSeatStatusList = [];
-  if (bookingSeatDetial.length > 0) {
-    bookingSeatDetial.forEach((el) => {
-      if (el.seatId1) changeSeatStatusList.push(el.seatId1);
-      if (el.seatId2) changeSeatStatusList.push(el.seatId2);
-      if (el.seatId3) changeSeatStatusList.push(el.seatId3);
-    });
-  }
-
   if (deleteBookingIdList.length > 0) {
     await bookingService.deleteBookingsByIdList(deleteBookingIdList);
     await bookingSeatDetialService.deleteBookingSeatsByIdList(deleteBookingSeatIdList);
-    if (changeSeatStatusList.length > 0) {
-      await seatService.updateAvailableStatusByIdList(changeSeatStatusList);
-    }
   }
 
   next();

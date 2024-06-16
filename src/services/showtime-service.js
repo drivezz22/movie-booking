@@ -19,6 +19,9 @@ showtimeService.deleteShowtimeByShowtimeId = (id) =>
 showtimeService.deleteShowtimeByDateAndTheater = (date, theaterId) =>
   prisma.showtime.deleteMany({ where: { date, theaterId } });
 
+showtimeService.getShowtimeByMovieId = (movieId) =>
+  prisma.showtime.findMany({ where: { movieId } });
+
 showtimeService.getShowtimeById = (id) =>
   prisma.showtime.findUnique({ where: { id }, include: { movie: true, theater: true } });
 

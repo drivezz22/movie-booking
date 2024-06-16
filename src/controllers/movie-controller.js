@@ -1,9 +1,11 @@
 const { MOVIE_IMAGE_DIR } = require("../constants");
+const { showtime } = require("../models/prisma");
 const {
   uploadService,
   movieService,
   highlightService,
   movieSelectionTypeService,
+  showtimeService,
 } = require("../services");
 const { tryCatch, createError } = require("../utils");
 const fs = require("fs-extra");
@@ -60,6 +62,15 @@ movieController.deleteMovie = tryCatch(async (req, res, next) => {
 
   if (existMovie.movieImagePath) {
     await uploadService.delete(existMovie.movieImagePath);
+  }
+
+  const existShowtime = await showtimeService.getShowtimeByMovieId(+movieId);
+
+  if (existShowtime.length > 0) {
+    createError({
+      message: "Cannot delete because the movie is on show",
+      statusCode: 400,
+    });
   }
 
   await highlightService.deleteHighlightByMovieId(+movieId);

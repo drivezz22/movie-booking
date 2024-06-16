@@ -5,7 +5,17 @@ const movieService = {};
 movieService.createMovie = (data) => prisma.movie.create({ data });
 
 movieService.updateMovieById = (movieId, data) =>
-  prisma.movie.update({ data, where: { id: movieId } });
+  prisma.movie.update({
+    data,
+    where: { id: movieId },
+    include: {
+      genre1: true,
+      genre2: true,
+      genre3: true,
+      movieSelections: true,
+      highlights: true,
+    },
+  });
 
 movieService.getMovieById = (movieId) =>
   prisma.movie.findUnique({ where: { id: movieId } });
