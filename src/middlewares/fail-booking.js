@@ -1,6 +1,6 @@
 const dayjs = require("dayjs");
 const { PAYMENT_TYPE } = require("../constants");
-const { bookingService, bookingSeatDetialService, seatService } = require("../services");
+const { bookingService, bookingSeatDetialService } = require("../services");
 const { tryCatch } = require("../utils");
 
 const failedBookingCheck = tryCatch(async (req, res, next) => {
