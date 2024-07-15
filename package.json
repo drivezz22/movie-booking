@@ -2,10 +2,10 @@
   "name": "movie-booking-api-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/app.js",
+    "dev": "nodemon app.js",
     "resetDB": "node prisma/reset.js",
     "lint": "eslint ."
   },
@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "5.15.0",
+    "@stripe/stripe-js": "^4.1.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.2.0",
     "cors": "^2.8.5",
@@ -28,7 +29,8 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "multer": "1.4.5-lts.1",
-    "qrcode": "^1.5.3"
+    "qrcode": "^1.5.3",
+    "stripe": "^16.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.4.0",

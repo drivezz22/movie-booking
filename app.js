@@ -1,5 +1,9 @@
 require("dotenv").config();
-const { notFoundMiddleware, errorMiddleware, authenticate } = require("./middlewares");
+const {
+  notFoundMiddleware,
+  errorMiddleware,
+  authenticate,
+} = require("./src/middlewares");
 const morgan = require("morgan");
 const express = require("express");
 const cors = require("cors");
@@ -11,7 +15,8 @@ const {
   showtimeRouter,
   bookingRouter,
   highlightRouter,
-} = require("./routes");
+  stripeRouter,
+} = require("./src/routes");
 
 const app = express();
 
@@ -20,6 +25,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 app.use("/auth", authRouter);
+app.use("/stripe", stripeRouter);
 app.use("/movies", authenticate, movieRouter);
 app.use("/seats", authenticate, seatRouter);
 app.use("/movie-selection-types", authenticate, movieSelectionRouter);
