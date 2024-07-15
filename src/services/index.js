@@ -1,7 +1,7 @@
 const hashService = require("./hash-service");
 const jwtService = require("./jwt-service");
 const userService = require("./user-service");
-const bookingSeatDetialService = require("./booking-seat-detial-service");
+const bookingSeatDetailService = require("./booking-seat-detial-service");
 const bookingService = require("./booking-service");
 const seatService = require("./seat-service");
 const uploadService = require("./upload-service");
@@ -14,7 +14,7 @@ module.exports = {
   hashService,
   jwtService,
   userService,
-  bookingSeatDetialService,
+  bookingSeatDetailService,
   bookingService,
   seatService,
   uploadService,

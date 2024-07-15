@@ -1,6 +1,6 @@
 const dayjs = require("dayjs");
 const { PAYMENT_TYPE } = require("../constants");
-const { bookingService, bookingSeatDetialService } = require("../services");
+const { bookingService, bookingSeatDetailService } = require("../services");
 const { tryCatch } = require("../utils");
 
 const failedBookingCheck = tryCatch(async (req, res, next) => {
@@ -23,7 +23,7 @@ const failedBookingCheck = tryCatch(async (req, res, next) => {
 
   if (deleteBookingIdList.length > 0) {
     await bookingService.deleteBookingsByIdList(deleteBookingIdList);
-    await bookingSeatDetialService.deleteBookingSeatsByIdList(deleteBookingSeatIdList);
+    await bookingSeatDetailService.deleteBookingSeatsByIdList(deleteBookingSeatIdList);
   }
 
   next();

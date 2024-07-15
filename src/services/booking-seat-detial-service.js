@@ -1,14 +1,14 @@
 const prisma = require("../models/prisma");
 
-const bookingSeatDetialService = {};
+const bookingSeatDetailService = {};
 
-bookingSeatDetialService.createBookingSeats = (data) =>
+bookingSeatDetailService.createBookingSeats = (data) =>
   prisma.bookingSeatsDetail.create({ data });
 
-bookingSeatDetialService.deleteBookingSeatsByIdList = (idList) =>
+bookingSeatDetailService.deleteBookingSeatsByIdList = (idList) =>
   prisma.bookingSeatsDetail.deleteMany({ where: { id: { in: idList } } });
 
-bookingSeatDetialService.getBookingSeatsByIdList = (idList) =>
+bookingSeatDetailService.getBookingSeatsByIdList = (idList) =>
   prisma.bookingSeatsDetail.findMany({ where: { id: { in: idList } } });
 
-module.exports = bookingSeatDetialService;
+module.exports = bookingSeatDetailService;

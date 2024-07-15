@@ -7,7 +7,7 @@ const {
 } = require("../constants");
 const {
   seatService,
-  bookingSeatDetialService,
+  bookingSeatDetailService,
   bookingService,
   uploadService,
   showtimeService,
@@ -65,13 +65,13 @@ bookingController.createBooking = async (req, res, next) => {
       bookingSeatData[BOOKING_SEAT_DETAIL_COL[idx]] = data.seatQuery[idx];
     }
 
-    const bookingSeatDetial = await bookingSeatDetialService.createBookingSeats(
+    const bookingSeatDetail = await bookingSeatDetailService.createBookingSeats(
       bookingSeatData
     );
 
     const bookingData = {
       ...data,
-      bookingSeatsDetailId: bookingSeatDetial.id,
+      bookingSeatsDetailId: bookingSeatDetail.id,
       qrCodeImagePath: "waiting upload",
       paymentTypeId: PAYMENT_TYPE.PENDING,
     };
@@ -81,22 +81,9 @@ bookingController.createBooking = async (req, res, next) => {
 
     const booking = await bookingService.createBooking(bookingData);
 
-    const qrCodePaymentName = `${QRCODE_IMAGE_DIR}/${new Date().getTime()}${Math.round(
-      Math.random() * 100000
-    )}_QRCODE_PAYMENT.png`;
-
-    await QRCode.toFile(qrCodePaymentName, `${process.env.PAYMENT_PATH}/${booking.id}`);
-    const qrCodeImagePath = await uploadService.upload(qrCodePaymentName);
-
-    const updateDate = await bookingService.updateBookingById(booking.id, {
-      qrCodeImagePath,
-    });
-
-    res.status(201).json({ message: "Booking is created", booking: updateDate });
+    res.status(201).json({ message: "Booking is created", booking: booking });
   } catch (err) {
     next(err);
-  } finally {
-    fs.emptyDirSync(QRCODE_IMAGE_DIR);
   }
 };
 
